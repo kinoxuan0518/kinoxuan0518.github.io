@@ -2679,11 +2679,12 @@ function inkSubmit(e){
   const saving=inkSave(txt);
   setTimeout(async()=>{
     const ok=await saving;gh.innerHTML='';btn.disabled=false;ta.placeholder=ph;
-    if(!onClaude()){st.innerHTML=tr('墨水干了。这一版的本子不留字；想让我读到，就寄给我。','The ink is dry. This copy of the notebook keeps nothing; if you want me to read it, post it to me.')+
-      `<small><a href="mailto:xuanzhenglong@blacklake.cn?subject=${encodeURIComponent(tr('给我留句话','Leave me a line'))}&body=${encodeURIComponent(txt)}">${tr('寄给 Kino ↗','Send it to Kino ↗')}</a></small>`;return}
-    st.innerHTML=ok?tr('墨水干了。只有这本子记得。','The ink is dry. Only the notebook remembers.'):tr('墨水干了，但这一次本子没记住。<small>这个预览版只收得到有编辑权限的人的留言。</small>','The ink dried, but the notebook didn’t keep it this time.<small>This preview only keeps notes from people with edit access.</small>')},RM?200:300+spans.length*step+1200)}
+    st.innerHTML=ok?tr('墨水干了。只有这本子记得。','The ink is dry. Only the notebook remembers.'):tr('墨水干了，但这一次本子没记住。','The ink dried, but the notebook didn’t keep it this time.')},RM?200:300+spans.length*step+1200)}
 async function inkSave(txt){
   try{
+    /* off Claude (the github.io copy) the note is posted to Kino's inbox by the site's own little server */
+    if(!onClaude()){const r=await fetch(API_BASE+'/api/ink',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:txt,lang:LANG})});
+      const j=await r.json().catch(()=>({}));return r.ok&&!!j.ok}
     if(!window.claude||!window.claude.use)return false;
     const [db,user]=await Promise.all([window.claude.use('db'),window.claude.use('user')]);
     if(!db||!user)return false;
@@ -2765,13 +2766,26 @@ function alAdd(who,text){const d=document.createElement('div');d.className='al-m
 /* where the talking version lives: on Claude, where 小杏仁 borrows the visitor's own Claude to think */
 const CLAUDE_HOME='https://claude.ai/artifact/DL6N2h98HKMMHhg4vadSvP';
 const onClaude=()=>!!(window.claude&&window.claude.use);
+/* the github.io copy talks through a small function on Vercel, which holds the persona and the model key */
+const API_BASE='https://kino-xuan.vercel.app';
+let apiState=null;   /* null: not asked yet; then true / false: whether the endpoint has a key */
+async function apiCheck(){if(apiState!==null)return apiState;
+  try{const r=await fetch(API_BASE+'/api/chat',{cache:'no-store'});const j=await r.json();apiState=!!(r.ok&&j.configured)}catch(e){apiState=false}return apiState}
+async function apiSample(turns,{signal,onText}){
+  const r=await fetch(API_BASE+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lang:LANG,turns}),signal});
+  if(!r.ok||!r.body){let code='upstream';try{code=(await r.json()).error||code}catch(e){}const er=new Error(code);er.code=code;throw er}
+  const rd=r.body.getReader(),dec=new TextDecoder();let text='';
+  try{for(;;){const {value,done}=await rd.read();if(done)break;text+=dec.decode(value,{stream:true});if(onText)onText({text})}}
+  catch(e){const er=new Error('cut');er.code=e&&e.name==='AbortError'?'cancelled':'upstream';er.text=text;throw er}
+  if(!text.trim()){const er=new Error('empty');er.code='upstream';throw er}
+  return {text}}
 function alOffline(){const d=document.createElement('div');d.className='al-msg ai';
   d.append(tr('在这里我连不上脑子。我想事情借的是访客自己的 Claude，所以只有在 Claude 上那一版里才能聊。项目都在旁边，可以直接看。','Out here I can’t reach my brain. I think with the visitor’s own Claude, so I can only talk in the version that lives on Claude. The projects are right beside me.'));
   const a=document.createElement('a');a.className='al-go';a.href=CLAUDE_HOME;a.target='_blank';a.rel='noopener';a.textContent=tr('去那里找我 ↗','Find me there ↗');
   d.append(document.createElement('br'),a);alLog.appendChild(d);alLog.scrollTop=alLog.scrollHeight;return d}
 function alOpen(){
   if(!alGreeted){alGreeted=true;
-    alAdd('ai',tr('你好，我是 Kino。','Hi, I’m Kino.'));if(!onClaude())alOffline()}
+    alAdd('ai',tr('你好，我是 Kino。','Hi, I’m Kino.'));if(!onClaude())apiCheck().then(ok=>{if(!ok)alOffline()})}
   alGet();
   if(matchMedia('(hover:hover)').matches)setTimeout(()=>alT.focus({preventScroll:true}),450)}
 function alClose(){if(alCtl)alCtl.abort()}
@@ -2781,8 +2795,9 @@ async function alAsk(q){
   alAdd('me',q);alT.value='';alT.style.height='';alSug.hidden=true;
   const b=alAdd('ai','');b.classList.add('wait');
   alBusy=true;alSend.disabled=true;alFace.classList.add('talk');
-  const s=await alGet();
-  if(!s&&!onClaude()){b.remove();alOffline();alDone();return}
+  const viaApi=!onClaude();
+  if(viaApi&&!(await apiCheck())){b.remove();alOffline();alDone();return}
+  const s=viaApi?(m,o)=>apiSample(m.slice(1),o):await alGet();
   if(!s){b.classList.remove('wait');b.textContent=tr('我的脑子只有在 Claude 里打开这个页面时才连得上，这里没法聊。项目都在旁边，可以直接点开看。','My brain only connects when this page is opened inside Claude, so I can’t talk here. The projects are right beside me — open any of them.');alDone();return}
   alTurns.push({role:'user',content:q});
   alCtl=new AbortController();
@@ -2792,7 +2807,8 @@ async function alAsk(q){
     b.classList.remove('wait');b.textContent=r.text;alTurns.push({role:'assistant',content:r.text});
   }catch(e){
     const code=e&&e.code,keep=e&&e.text;b.classList.remove('wait');
-    if(code==='cancelled'){b.textContent=keep||tr('（没说完）','(cut off)')}
+    if(code==='not_configured'){b.remove();apiState=false;alOffline()}
+    else if(code==='cancelled'){b.textContent=keep||tr('（没说完）','(cut off)')}
     else if(code==='refused'){b.textContent=tr('这个我不方便答，换个问题吧。','I’d rather not answer that one. Try another?')}
     else if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed','session_expired'].includes(code)){
       b.textContent=code==='session_expired'?tr('你的 Claude 登录过期了，重新登录一下再来找我。','Your Claude login has expired. Sign in again and come find me.'):tr('我得借用你的 Claude 才能说话；没有允许的话，这次就先聊到这儿。项目都在旁边，可以直接看。','I need to borrow your Claude to talk. Without that permission, this is as far as we go for now. The projects are right beside me.');
