@@ -9,15 +9,10 @@ import { okOrigin, cors, json, limited, ipOf } from './_lib.js';
 const KEY = () => process.env.DEEPSEEK_API_KEY || process.env.LLM_API_KEY || '';
 
 export function OPTIONS(req) { return new Response(null, { status: 204, headers: cors(req.headers.get('origin')) }); }
-/* GET: is the key there? with ?check, also: which of our variables the server can see (names only), and whether
-   DeepSeek accepts the key and has balance (its free /user/balance call, no tokens spent) */
+/* GET: is the key there? with ?check, also whether DeepSeek accepts it and has balance (its free /user/balance call, no tokens spent) */
 export async function GET(req) {
   const h = cors(req.headers.get('origin')), out = { ok: true, configured: !!KEY(), ink: !!process.env.INK_TO };
   if (new URL(req.url).searchParams.has('check') && !limited('check:' + ipOf(req), 6, 10 * 60e3)) {
-    out.seen = Object.keys(process.env).filter(k => /DEEPSEEK|LLM_|INK|RESEND/i.test(k));
-    /* a Resend key saved under some other name, or key and name swapped: report the name / a flag, never a value */
-    out.resendLike = Object.keys(process.env).filter(k => /^re_[A-Za-z0-9]/.test(process.env[k] || ''));
-    out.swapped = Object.keys(process.env).some(k => /^re_[A-Za-z0-9]{6,}/.test(k));
     if (KEY()) {
       try {
         const base = (process.env.LLM_BASE_URL || 'https://api.deepseek.com').replace(/\/+$/, '');

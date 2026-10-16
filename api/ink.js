@@ -7,13 +7,9 @@ import { okOrigin, cors, json, limited, ipOf } from './_lib.js';
 
 export function OPTIONS(req) { return new Response(null, { status: 204, headers: cors(req.headers.get('origin')) }); }
 
-/* GET ?check: send one test note the same way a visitor's note goes, and report what the mail service answered */
-export async function GET(req) {
-  const h = cors(req.headers.get('origin')), to = process.env.INK_TO || '';
-  const out = { configured: !!to, via: process.env.RESEND_API_KEY ? 'resend' : 'formsubmit' };
-  if (!to || !new URL(req.url).searchParams.has('check') || limited('inkcheck:' + ipOf(req), 3, 10 * 60e3)) return json(out, 200, h);
-  const r = await deliver(to, '（连通测试）笔记本到邮箱的路是通的。', '中文');
-  return json({ ...out, ...r }, 200, h);
+/* GET: is the notebook wired to an inbox, and through which service (no test mail: that would let anyone fill the inbox) */
+export function GET(req) {
+  return json({ configured: !!process.env.INK_TO, via: process.env.RESEND_API_KEY ? 'resend' : 'formsubmit' }, 200, cors(req.headers.get('origin')));
 }
 
 export async function POST(req) {
