@@ -7,14 +7,19 @@
 <meta name="description" content="Kino Xuan 的主页：一艘自转飞船里的一节舱，窗外是黑洞。The home of Kino Xuan: one cabin in a spinning ship, a black hole beyond the glass.">
 <meta name="theme-color" content="#08080b">
 <meta name="google" content="notranslate">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <meta property="og:title" content="Kino Xuan · 漂流的舱 / The Drifting Cabin">
 <meta property="og:description" content="一艘自转飞船里的一节舱，窗外是黑洞。舱里的东西都可以点开。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%2308080b'/%3E%3Ccircle cx='16' cy='16' r='9.5' fill='none' stroke='%23f2a33a' stroke-width='3.5'/%3E%3Ccircle cx='16' cy='16' r='5.5' fill='%23000'/%3E%3C/svg%3E">
 <style>[hidden]{display:none!important}</style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Serif+SC:wght@600;900&family=Space+Mono:wght@400;700&family=VT323&display=swap">
 <style>
+/* every font is served from this site: nothing waits on a third-party font host (which some networks can't reach at all).
+   Anton, Space Mono, VT323 and Noto Serif SC (SIL OFL 1.1, via github.com/google/fonts), cut down to the characters on this page */
+@font-face{font-family:'Anton';src:url(fonts/anton.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Space Mono';src:url(fonts/space-mono-400.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Space Mono';src:url(fonts/space-mono-700.woff2) format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'VT323';src:url(fonts/vt323.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Noto Serif SC';src:url(fonts/noto-serif-sc-600.woff2) format('woff2');font-weight:300 700;font-display:swap}
+@font-face{font-family:'Noto Serif SC';src:url(fonts/noto-serif-sc-900.woff2) format('woff2');font-weight:800 950;font-display:swap}
 /* 霞鹜文楷 LXGW WenKai, subset for web delivery (SIL OFL 1.1, github.com/lxgw/LxgwWenKai).
    -400 holds every character on this page; -400-ext the rest of the common GB2312 set, fetched only if a visitor writes one on the ink page. */
 @font-face{font-family:'Kino Hand';src:url(fonts/kino-hand-400.woff2) format('woff2');font-weight:300 450;font-display:swap}
@@ -164,7 +169,8 @@ body.layout #dock{background:linear-gradient(rgba(239,237,230,0),rgba(239,237,23
 #bubble small{display:block;font-family:var(--f-mono);font-size:10px;letter-spacing:.2em;color:#8a8070;margin-top:4px}
 body.away #bubble,body.viewing #bubble,body.scoping #bubble{display:none}
 #err{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  font-family:var(--f-serif);font-size:15px;line-height:1.8;text-align:center;z-index:9;background:var(--ink)}
+  font-family:var(--f-serif);font-size:15px;line-height:1.8;text-align:center;z-index:9;background:var(--ink);flex-direction:column}
+#err small{display:block;margin-top:16px;font-family:var(--f-mono);font-size:11px;line-height:1.6;color:var(--dim);white-space:pre-wrap;max-width:min(90vw,80ch);text-align:left}
 
 #idx{display:flex;gap:3px;pointer-events:auto;min-width:0;flex-wrap:nowrap}
 #dock #note{max-width:30ch}
@@ -448,7 +454,7 @@ body.scoping #brand,body.scoping #dock,body.scoping #tip,body.scoping #nowp{disp
 .al-gh{font-size:10px;letter-spacing:.2em;color:var(--paper);text-decoration:none;align-self:flex-start;border-bottom:1px solid var(--line);padding-bottom:2px}
 .al-chat{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:10px;background:rgba(10,11,9,.55);border:1px solid rgba(236,231,222,.12);padding:14px}
 .al-log{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-right:4px}
-.al-msg{max-width:min(86%,560px);font-family:var(--f-serif);font-weight:600;font-size:14.5px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;padding:9px 13px}
+.al-msg{max-width:min(86%,560px);font-family:Georgia,"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;font-weight:600;font-size:14.5px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;padding:9px 13px}
 .al-msg.ai{align-self:flex-start;background:rgba(var(--alr),.08);border-left:3px solid var(--al);color:var(--paper)}
 .al-msg.me{align-self:flex-end;background:#f3ead8;color:#1f1810}
 .al-msg .al-go{display:inline-block;margin-top:6px;color:var(--al);font-family:var(--f-mono);font-weight:400;font-size:11px;letter-spacing:.14em;text-decoration:none;border-bottom:1px solid currentColor}
@@ -536,6 +542,7 @@ body.scoping #brand,body.scoping #dock,body.scoping #tip,body.scoping #nowp{disp
 #langB b.on{opacity:1;color:#d8b06a}
 #langB i{font-style:normal;opacity:.3}
 #langB:hover b{opacity:1}
+body.en{--f-serif:Georgia,'Times New Roman','Noto Serif SC',"Songti SC",serif}
 body.en .ix b{display:none}
 body.en .ix span{font-family:var(--f-display);font-weight:400;font-size:14px;letter-spacing:.05em;text-transform:uppercase}
 @media (max-width:720px){body.en .ix span{font-family:'Anton',Impact,'Arial Narrow',sans-serif;font-size:11.5px;letter-spacing:.01em}body.en .ix{overflow:hidden}}
@@ -836,6 +843,30 @@ ARTICLES.forEach((a,i)=>{const e=ART_EN[i];a.lede_en=e.lede;a.tag_en=e.tag;a.p_e
 /* ================= GLSL: shared ================= */
 const HEAD=`#version 300 es
 precision highp float;
+/* quality: FULL by default; LITE (phones, and the first fallback) trims loop counts and the room dust;
+   SAFE (second fallback, for GPUs/drivers that choke on the full shader) also drops the debris and the TV picture */
+#ifdef SAFE
+#define LITE
+#endif
+#if defined(SAFE)
+#define MARCH_N 160
+#define BH_N 80
+#elif defined(LITE)
+#define MARCH_N 190
+#define BH_N 100
+#else
+#define MARCH_N 230
+#define BH_N 130
+#endif
+#ifdef LITE
+#define SH_N 28
+#define AO_N 3
+#define GR_N 6
+#else
+#define SH_N 48
+#define AO_N 5
+#define GR_N 12
+#endif
 uniform vec2 uRes,uJit;uniform float uT,uE,uFlick,uHover,uFocal,uGrow,uSway,uLights,uWheel,uFold;uniform vec3 uCamPos,uCamTgt,uTV;uniform int uZero;uniform sampler2D uTVT;uniform float uTVOn,uArm;
 layout(location=0) out vec4 oCol;layout(location=1) out vec4 oND;layout(location=2) out vec4 oID;
 float h1(float n){return fract(sin(n)*43758.5453);}
@@ -867,10 +898,10 @@ float gline(float x,float hw,float w){return fpulse(x+hw,2.*hw,w);}
 
 const TAIL=`
 float softsh(vec3 ro,vec3 rd,float maxt){float r=1.,t=.02+.035*h2(gl_FragCoord.xy*.73+uJit*91.);
- for(int i=uZero;i<48;i++){float hh=map(ro+rd*t).x;r=min(r,10.*hh/t);t+=clamp(hh,.018,.25);if(r<.005||t>maxt)break;}
+ for(int i=uZero;i<SH_N;i++){float hh=map(ro+rd*t).x;r=min(r,10.*hh/t);t+=clamp(hh,.018,.25);if(r<.005||t>maxt)break;}
  r=clamp(r,0.,1.);return r*r*(3.-2.*r);}
 float calcAO(vec3 p,vec3 n){float o=0.,s=1.;
- for(int i=uZero;i<5;i++){float hh=.02+.11*float(i);float d=map(p+n*hh).x;o+=(hh-d)*s;s*=.82;}
+ for(int i=uZero;i<AO_N;i++){float hh=.02+.44*float(i)/float(AO_N-1);float d=map(p+n*hh).x;o+=(hh-d)*s*(5./float(AO_N));s*=.82;}
  return clamp(1.-2.*o,0.,1.);}
 vec3 calcN(vec3 p){vec3 n=vec3(0.);
  for(int i=uZero;i<4;i++){vec3 e=.5773*(2.*vec3(float(((i+3)>>1)&1),float((i>>1)&1),float(i&1))-1.);n+=e*map(p+.0011*e).x;}
@@ -885,11 +916,11 @@ vec3 bhCol(vec3 rd){
  vec3 vel=normalize(fw*l.z+rt*l.x+up*l.y),pos=ro;
  vec3 cr=cross(pos,vel);float hh=dot(cr,cr);
  float tr=1.;bool esc=false;vec3 col=vec3(0.);
- for(int i=uZero;i<130;i++){
+ for(int i=uZero;i<BH_N;i++){
   float r2=dot(pos,pos),r=sqrt(r2);
   if(r<1.){tr=0.;break;}
   if(r>BH_D*1.6&&dot(pos,vel)>0.){esc=true;break;}
-  float dt=.06*r+.03;
+  float dt=(.06*r+.03)*(130./float(BH_N));
   vel=normalize(vel-1.5*hh*pos/(r2*r2*r)*dt);
   vec3 np=pos+vel*dt;
   if(pos.y*np.y<0.){
@@ -910,9 +941,9 @@ vec3 bhCol(vec3 rd){
 vec3 godrays(vec3 ro,vec3 rd,float tmax){
  float tm=min(tmax,GR_MAX),a=0.;
  float j=h2(gl_FragCoord.xy+fract(uT*3.7)*100.);
- for(int i=uZero;i<12;i++){float tt=(float(i)+j)/12.*tm;vec3 q=ro+rd*tt;
+ for(int i=uZero;i<GR_N;i++){float tt=(float(i)+j)/float(GR_N)*tm;vec3 q=ro+rd*tt;
   if(q.z<WZ-.02)a+=aperture(q)*(.55+.45*n2(q.xy*2.5+q.z*1.7+uT*.15));}
- a/=12.;
+ a/=float(GR_N);
  float ph=.35+.65*pow(max(dot(rd,LDIR),0.),3.);
  return KEY*a*ph*GR_STR*tm/(tm+2.);}
 float tmc(float x){return x<.72?x:.72+.28*(1.-exp(-(x-.72)/.28));}
@@ -923,7 +954,7 @@ void main(){
  vec3 ro=uCamPos,fw=normalize(uCamTgt-ro),rt=normalize(cross(vec3(0.,1.,0.),fw)),up=cross(fw,rt);
  vec3 rd=normalize(fw*uFocal+rt*uv.x+up*uv.y);
  float t=.05;vec2 h=vec2(0.);bool hit=false;
- for(int i=uZero;i<230;i++){h=map(ro+rd*t);if(h.x<.0004*t+.0005){hit=true;break;}t+=h.x*.9;if(t>FAR)break;}
+ for(int i=uZero;i<MARCH_N;i++){h=map(ro+rd*t);if(h.x<.0004*t+.0005){hit=true;break;}t+=h.x*.9;if(t>FAR)break;}
  vec3 col,n=vec3(0.);float m=0.,dep=FAR,em=0.;
  if(hit){
   vec3 p=ro+rd*t;m=h.y;dep=t;n=calcN(p);
@@ -958,13 +989,15 @@ void main(){
   col=vec3(0.);
 #else
   col=bhCol(outsideDir(rd));
+#ifndef SAFE
   vec4 db=debris(ro,rd);col=mix(col,db.rgb,db.a)+db.rgb*(1.-db.a);
+#endif
 #endif
   col=1.-exp(-col*1.6);col=pow(col,vec3(.9));
   em=max(col.r,max(col.g,col.b));
  }
  col+=godrays(ro,rd,dep);
-#ifndef NOOUTSIDE
+#if !defined(NOOUTSIDE) && !defined(LITE)
  col+=dust(ro,rd,dep);
 #endif
  oCol=vec4(clamp(col,0.,1.),1.);
@@ -1534,7 +1567,7 @@ vec3 albedo(float m,vec3 p,vec3 n){
   return c*(.84+.16*n2(p.xz*55.)+.08*n2(p.xz*190.));}
  if(m==70.)return vec3(.66,.34,.22)*(.9+.12*n2(p.xy*24.));
  if(m==71.){vec3 q=p-vec3(-2.1,.19,2.16);float bd=1e3;vec3 bl=vec3(0.);float bs=1.;
-  for(int i=0;i<13;i++){float fi=float(i);if(fi>=7.+ceil(uGrow-.001))break;vec3 lc;float sz;vec3 l=leafL(q,fi,lc,sz);
+  for(int i=uZero;i<13;i++){float fi=float(i);if(fi>=7.+ceil(uGrow-.001))break;vec3 lc;float sz;vec3 l=leafL(q,fi,lc,sz);
    float d=sdEll(l,vec3(.17,.02,.095)*sz);if(d<bd){bd=d;bl=l/max(sz,.01);bs=sz;}}
   vec3 c=mix(vec3(.1,.28,.13),vec3(.2,.44,.19),n2(p.xz*7.+p.y*3.));
   float rib=smoothstep(.006,.0,abs(bl.z))*step(bl.x,.15);
@@ -1588,6 +1621,9 @@ vec2 specOf(float m){
  return vec2(0.);}
 vec3 emis(float m,vec3 p,vec3 n){
  if(m==14.){if(uTVOn<.01)return vec3(0.);
+#ifdef SAFE
+  return uTV*.8;
+#endif
   /* the same picture as the set you walk up to: the VCR's canvas, through the bulged glass, with scanlines */
   vec3 c=p-vec3(-2.76,1.15,1.95);c.xz*=rot(-.44);vec2 uv=(c.xy-vec2(-.05,.16))/vec2(.175,.145);
   vec2 st=clamp(vec2(uv.x*.5+.5,.5-uv.y*.5),.002,.998);
@@ -1686,7 +1722,12 @@ vec3 dust(vec3 ro,vec3 rd,float tmax){
 /* ================= telescope eyepiece: the same light-bending, with real colour if asked ================= */
 const SCOPE=`#version 300 es
 precision highp float;
-uniform vec2 uRes;uniform float uT,uE,uYaw,uPitch,uZoom,uPhys,uPhi,uAp,uK,uLit;
+uniform vec2 uRes;uniform float uT,uE,uYaw,uPitch,uZoom,uPhys,uPhi,uAp,uK,uLit;uniform int uZero;
+#ifdef LITE
+#define SBH_N 110
+#else
+#define SBH_N 170
+#endif
 out vec4 o;
 float h2(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float star(vec2 q){vec2 g=floor(q),f=fract(q)-.5;float s=h2(g);vec2 o=(vec2(h2(g+1.7),h2(g+5.3))-.5)*.7;
@@ -1715,11 +1756,11 @@ vec3 bh(vec3 rd){
  vec3 vel=normalize(fw*l.z+rt*l.x+up*l.y),pos=ro;
  vec3 cr=cross(pos,vel);float hh=dot(cr,cr);
  float tr=1.;bool esc=false;vec3 col=vec3(0.);
- for(int i=0;i<170;i++){
+ for(int i=uZero;i<SBH_N;i++){
   float r2=dot(pos,pos),r=sqrt(r2);
   if(r<1.){tr=0.;break;}
   if(r>BH_D*1.6&&dot(pos,vel)>0.){esc=true;break;}
-  float dt=uPhys>.5?.04*r+.02:.06*r+.03;
+  float dt=(uPhys>.5?.04*r+.02:.06*r+.03)*(170./float(SBH_N));
   vel=normalize(vel-1.5*hh*pos/(r2*r2*r)*dt);
   vec3 np=pos+vel*dt;
   if(pos.y*np.y<0.){
@@ -1886,31 +1927,45 @@ const RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const $=id=>document.getElementById(id);
 const cv=$('cv');
 const gl=cv.getContext('webgl2',{antialias:false,alpha:false,premultipliedAlpha:false,preserveDrawingBuffer:SHOT,powerPreference:'high-performance'});
-function fail(msg){const e=$('err');e.textContent=msg;e.hidden=false;const b=document.getElementById('boot');if(b)b.remove()}
+function fail(msg,detail){const e=$('err');e.textContent=msg;if(detail){const sm=document.createElement('small');sm.textContent=detail;e.appendChild(sm)}
+  e.hidden=false;const b=document.getElementById('boot');if(b)b.remove()}
+/* how hard the scene shader works: 0 full, 1 lite (phones; first fallback), 2 safe (second fallback). A level that had to fall
+   back is remembered, so the next visit starts where this device last succeeded. ?qual= forces one. */
+let QUAL=Q.has('qual')?+Q.get('qual'):(matchMedia('(pointer:coarse)').matches?1:0);
+try{if(!Q.has('qual'))QUAL=Math.max(QUAL,Math.min(2,+localStorage.getItem('kx.qual')||0))}catch(e){}
+const QDEF=()=>QUAL>=2?'#define SAFE\n':QUAL>=1?'#define LITE\n':'';
+let failed=false,spLite=false;
+function gpuName(){try{const x=gl.getExtension('WEBGL_debug_renderer_info');return String(x?gl.getParameter(x.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER))}catch(e){return '?'}}
+function diag(P){const log=String(P&&P.log||'').replace(/[\u0000-\u0008\u000b-\u001f]/g,'').split('\n').map(x=>x.trim()).filter(Boolean).slice(0,3).join('\n').slice(0,320);
+  return `GPU: ${gpuName()}\nquality: ${QUAL}${gl&&gl.isContextLost()?' · context lost':''}${log?'\n'+log:''}`}
+function failGL(P){if(failed)return;failed=true;
+  fail(tr('这台设备的显卡没能把场景画出来（已经自动换过更轻的版本）。把这一屏截图发给我，我来修。','This device’s graphics couldn’t draw the scene, even after falling back to lighter versions. Send me a screenshot of this screen and I’ll fix it.'),diag(P))}
 if(!gl){fail(tr('这个浏览器打不开 WebGL2，看不到这节舱。换最新版的 Chrome、Edge 或 Safari 再试试。','This browser can’t run WebGL2, so the cabin won’t show. Try the latest Chrome, Edge or Safari.'))}
 const FLT=gl&&!!gl.getExtension('EXT_color_buffer_float');
 const PAR=gl&&gl.getExtension('KHR_parallel_shader_compile');
 const DEF=FLT?'#define FLOATBUF 1\n':'';
 const VS=`#version 300 es
 void main(){vec2 p=vec2(float((gl_VertexID<<1)&2),float(gl_VertexID&2));gl_Position=vec4(p*2.-1.,0.,1.);}`;
-const withDef=src=>src.replace('#version 300 es\n','#version 300 es\n'+DEF);
+const withDef=src=>src.replace('#version 300 es\n','#version 300 es\n'+DEF+QDEF());
+const scopeSrc=()=>SCOPE.replace('#version 300 es\n','#version 300 es\n'+(QUAL>=1||spLite?'#define LITE\n':''));
 
 function sh(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s}
 function startProg(fs){
   const p=gl.createProgram(),v=sh(gl.VERTEX_SHADER,VS),f=sh(gl.FRAGMENT_SHADER,fs);
   gl.attachShader(p,v);gl.attachShader(p,f);gl.linkProgram(p);return {p,v,f,ok:false,u:{}}}
 function linked(P){
-  if(P.ok)return true;
-  if(PAR&&!gl.getProgramParameter(P.p,PAR.COMPLETION_STATUS_KHR))return false;
-  if(!gl.getProgramParameter(P.p,gl.LINK_STATUS)){
-    console.error(gl.getShaderInfoLog(P.f)||gl.getProgramInfoLog(P.p));
-    P.bad=true;fail(tr('这个场景的着色器在你的显卡上编译失败了。截个图发给我，我来修。','The scene’s shaders failed to compile on your graphics card. Send me a screenshot and I’ll fix it.'));return false}
+  if(P.ok)return true;if(P.bad)return false;
+  const lost=gl.isContextLost();
+  if(PAR&&!lost&&!gl.getProgramParameter(P.p,PAR.COMPLETION_STATUS_KHR))return false;
+  if(lost||!gl.getProgramParameter(P.p,gl.LINK_STATUS)){
+    P.log=lost?'context lost':(gl.getShaderInfoLog(P.f)||gl.getProgramInfoLog(P.p)||'link failed');
+    console.error(P.log);P.bad=true;return false}
   const n=gl.getProgramParameter(P.p,gl.ACTIVE_UNIFORMS);
   for(let i=0;i<n;i++){const a=gl.getActiveUniform(P.p,i);P.u[a.name]=gl.getUniformLocation(P.p,a.name)}
   P.ok=true;return true}
 
 const progs=[];
-function want(i){const pre=SHOT&&Q.get('mask')==='1'?'#define NOOUTSIDE\n':'';if(!progs[i])progs[i]=startProg(withDef(HEAD+pre+SC[i].glsl+TAIL));return progs[i]}
+function want(i){const pre=(SHOT&&Q.get('mask')==='1'?'#define NOOUTSIDE\n':'')+(Q.has('breakq')&&QUAL<+Q.get('breakq')?'#error testing the fallback\n':'');if(!progs[i])progs[i]=startProg(withDef(HEAD+pre+SC[i].glsl+TAIL));return progs[i]}
 let comp=null,rsv=null,fin=null;
 
 const vao=gl&&gl.createVertexArray();
@@ -1945,7 +2000,7 @@ function mkPost(){
 const halton=(i,b)=>{let f=1,r=0;while(i>0){f/=b;r+=f*(i%b);i=Math.floor(i/b)}return r};
 
 /* ================= sizing ================= */
-const SMAX=Math.min(window.devicePixelRatio||1,2),SMIN=.34;
+const SMAX=Math.min(window.devicePixelRatio||1,2),SMIN=.34,COARSE=matchMedia('(pointer:coarse)').matches;
 let cssW=1,cssH=1,scale=+(Q.get('scale')||Math.max(.7,SMAX*(matchMedia('(pointer:coarse)').matches?.5:.68)));
 function resize(){
   cssW=Math.max(1,innerWidth);cssH=Math.max(1,innerHeight);
@@ -1994,11 +2049,18 @@ function pickAt(x,y){
 
 function draw(t){
   const sc=SC[cur],P=progs[cur];
+  if(P&&!P.ok&&!P.bad)linked(P);
+  if(P&&P.bad){
+    if(QUAL<2&&!gl.isContextLost()){QUAL++;try{localStorage.setItem('kx.qual',String(QUAL))}catch(e){}progs[cur]=null;want(cur)}
+    else failGL(P);
+    return false}
   if(!P||!linked(P))return false;
   if(!comp)comp=startProg(withDef(COMP));
   if(!rsv)rsv=startProg(RESOLVE);
   if(!fin)fin=startProg(FINAL);
-  if(!linked(comp)||!linked(rsv)||!linked(fin))return false;
+  if(comp.bad){failGL(comp);return false}
+  const cOK=linked(comp),rOK=linked(rsv)||rsv.bad,fOK=linked(fin)||fin.bad;
+  if(!cOK||!rOK||!fOK)return false;
   const asp=cssW/cssH,still=1-away,pt=portrait();
   const dx=RM||SHOT?0:Math.sin(t*.21)*.035+Math.sin(t*.53)*.01,dy=RM||SHOT?0:Math.sin(t*.27)*.02;
   const lk=(pt?lookX:0)*still;
@@ -2065,17 +2127,21 @@ function draw(t){
   gl.uniform3fv(c.uInk,sc.ink);
   const ac=hover?hexRGB(obOf(hover).a):[1,1,1];gl.uniform3fv(c.uAcc,ac);
   gl.drawArrays(gl.TRIANGLES,0,3);
-  /* resolve: average with what came before while nothing moves */
-  const dst=hist[taaFlip],src=hist[1-taaFlip];
+  /* resolve: average with what came before while nothing moves (skipped if this GPU couldn't build it) */
+  const dst=hist[taaFlip],src=hist[1-taaFlip];let out=post;
+  if(!rsv.bad){out=dst;
   gl.bindFramebuffer(gl.FRAMEBUFFER,dst.f);gl.useProgram(rsv.p);const r=rsv.u;
   gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,post.t);gl.uniform1i(r.tCur,0);
   gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,src.t);gl.uniform1i(r.tHist,1);gl.activeTexture(gl.TEXTURE0);
   const avg=SHOT;gl.uniform1f(r.uA,taaN===0?1:(avg?1/(taaN+1):.22));gl.uniform1f(r.uClamp,avg?0:1);gl.uniform1f(r.uStep,cv.width/fb.w);
-  gl.drawArrays(gl.TRIANGLES,0,3);
+  gl.drawArrays(gl.TRIANGLES,0,3)}
+  if(!fin.bad){
   gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,cv.width,cv.height);gl.useProgram(fin.p);const fu=fin.u;
-  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,dst.t);gl.uniform1i(fu.tS,0);
+  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,out.t);gl.uniform1i(fu.tS,0);
   const up=cv.width/fb.w;gl.uniform1f(fu.uSharp,Math.max(.2,Math.min(.9,.25+(up-1)*.4)));gl.uniform1i(fu.uOff,Math.max(1,Math.round(up*.5)));
   gl.drawArrays(gl.TRIANGLES,0,3);
+  }else{gl.bindFramebuffer(gl.READ_FRAMEBUFFER,out.f);gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER,null);
+    gl.blitFramebuffer(0,0,cv.width,cv.height,0,0,cv.width,cv.height,gl.COLOR_BUFFER_BIT,gl.NEAREST);gl.bindFramebuffer(gl.READ_FRAMEBUFFER,null)}
   taaFlip=1-taaFlip;taaN++;
   if(inside&&isMouse&&!SHOT&&!moving&&!busy&&!view&&!win)setHover(s,'scene');
   if(!SHOT)adapt(cost);
@@ -2084,8 +2150,9 @@ function hexRGB(h){return [1,3,5].map(i=>parseInt(h.substr(i,2),16)/255)}
 function adapt(cost){
   costs.push(cost);if(costs.length<5)return;
   const a=costs.reduce((x,y)=>x+y,0)/costs.length;costs=[];
-  if(a>48&&scale>SMIN){scale=Math.max(SMIN,scale*(a>90?.7:.85));resize()}
-  else if(a<26&&scale<SMAX&&!anim){scale=Math.min(SMAX,scale*1.08);resize()}}
+  const lo=COARSE?34:26,hi=COARSE?64:48;
+  if(a>hi&&scale>SMIN){scale=Math.max(SMIN,scale*(a>hi*1.9?.7:.85));resize()}
+  else if(a<lo&&scale<SMAX&&!anim){scale=Math.min(SMAX,scale*1.08);resize()}}
 
 /* ================= UI: the object index under the room ================= */
 const idx=$('idx');
@@ -2257,6 +2324,7 @@ const EYE=(()=>{const d=nrm3([-.04,.05,1]),ta=[1.25,1.15,1.85],e=ta.map((v,i)=>v
 function eyeHole(){const r=.016/.058*(portrait()?.76:SC[cur].cam.f*Math.min(1,Math.max(.55,cssW/cssH/1.6)))*cssH;
   return {px:r,ap:r/Math.min(cssW,cssH)}}
 function openScope(){
+  if(sp&&sp.bad){openWindow();return}
   busy=true;setHover(0,'idx');document.body.classList.add('away');
   const ev=$('eyeV'),H=eyeHole();ev.style.setProperty('--eye',(H.px*2)+'px');ev.classList.remove('gone');
   setTimeout(()=>ev.classList.add('on'),RM?0:520);
@@ -2279,7 +2347,7 @@ $('sIn').addEventListener('click',()=>{zoom=Math.max(.12,zoom/1.25);dirty=true})
 $('sOut').addEventListener('click',()=>{zoom=Math.min(1.1,zoom*1.25);dirty=true});
 $('sExit').addEventListener('click',closeScope);
 function drawScope(t){
-  if(!sp)sp=startProg(SCOPE);
+  if(!sp)sp=startProg(scopeSrc());
   if(!linked(sp))return false;
   gl.bindVertexArray(vao);gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,cv.width,cv.height);
   gl.useProgram(sp.p);const u=sp.u;
@@ -2683,7 +2751,7 @@ function inkSubmit(e){
 async function inkSave(txt){
   try{
     /* off Claude (the github.io copy) the note is posted to Kino's inbox by the site's own little server */
-    if(!onClaude()){const r=await fetch(API_BASE+'/api/ink',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:txt,lang:LANG})});
+    if(!onClaude()){const r=await fetch(API_BASE+'/api/ink',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:txt,lang:LANG}),signal:withTimeout(12000)});
       const j=await r.json().catch(()=>({}));return r.ok&&!!j.ok}
     if(!window.claude||!window.claude.use)return false;
     const [db,user]=await Promise.all([window.claude.use('db'),window.claude.use('user')]);
@@ -2769,8 +2837,9 @@ const onClaude=()=>!!(window.claude&&window.claude.use);
 /* the github.io copy talks through a small function on Vercel, which holds the persona and the model key */
 const API_BASE='https://kino-xuan.vercel.app';
 let apiState=null;   /* null: not asked yet; then true / false: whether the endpoint has a key */
+const withTimeout=ms=>{const c=new AbortController();setTimeout(()=>c.abort(),ms);return c.signal};
 async function apiCheck(){if(apiState!==null)return apiState;
-  try{const r=await fetch(API_BASE+'/api/chat',{cache:'no-store'});const j=await r.json();apiState=!!(r.ok&&j.configured)}catch(e){apiState=false}return apiState}
+  try{const r=await fetch(API_BASE+'/api/chat',{cache:'no-store',signal:withTimeout(7000)});const j=await r.json();apiState=!!(r.ok&&j.configured)}catch(e){apiState=false}return apiState}
 async function apiSample(turns,{signal,onText}){
   const r=await fetch(API_BASE+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({lang:LANG,turns}),signal});
   if(!r.ok||!r.body){let code='upstream';try{code=(await r.json()).error||code}catch(e){}const er=new Error(code);er.code=code;throw er}
@@ -3060,7 +3129,9 @@ function loop(now){
   lastQ=q;
   const t=RM?7:(fast?(now-T0)/1000:q/12)+2;
   if(scope){if(drawScope(t))dirty=false;return}
-  if(draw(t)){dirty=false;rendered=cur;if(!sp)sp=startProg(SCOPE);if(!booted)bootDone()}}
+  if(draw(t)){dirty=false;rendered=cur;if(!sp)sp=startProg(scopeSrc());if(!booted)bootDone()}
+  if(sp&&!sp.ok&&!sp.bad)linked(sp);
+  if(sp&&sp.bad&&!spLite&&!gl.isContextLost()){spLite=true;sp=startProg(scopeSrc())}}
 
 /* ================= switching language: re-letter everything that was built from data ================= */
 function relang(){
@@ -3075,6 +3146,7 @@ let booted=false;
 const boot=$('boot');
 function bootDone(){
   booted=true;
+  setTimeout(()=>prime(RECORDS[0].f),RM?0:600);
   if(!SHOT)playRec(0);
   if(!intro){boot.remove();return}
   boot.classList.add('out');setTimeout(()=>boot.remove(),1200);
@@ -3100,12 +3172,11 @@ if(gl){
   if(SHOT&&Q.has('mx')){mx=mxT=+Q.get('mx');my=myT=+(Q.get('my')||0)}
   if(!SHOT&&!RM){intro=true;pose={p:[...OPEN.p],t:[...OPEN.t]};away=1;document.body.classList.add('intro')}
   if(SHOT||RM)boot.remove();
-  prime(RECORDS[0].f);
   resize();syncNote();want(0);
   if(SHOT){
     const tt=+(Q.get('t')||14);
     (function tryShot(){
-      if(scope){if(!sp)sp=startProg(SCOPE);if(!linked(sp)){if(sp.bad){document.title='FAIL';return}return setTimeout(tryShot,50)}
+      if(scope){if(!sp)sp=startProg(scopeSrc());if(!linked(sp)){if(sp.bad){document.title='FAIL';return}return setTimeout(tryShot,50)}
         $('scopeUI').hidden=false;document.body.classList.add('scoping');syncScope();drawScope(tt);gl.finish();document.title='READY';return}
       const P=progs[cur];
       if(!P||!linked(P)){if(P&&P.bad){document.title='FAIL';return}return setTimeout(tryShot,50)}

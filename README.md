@@ -20,4 +20,4 @@ The home page of Kino Xuan: one cabin in a spinning ship drifting by a black hol
 | `RESEND_API_KEY` | 可选，填了就用 Resend 发信，否则用 FormSubmit（第一次会收到一封激活邮件，点一下即可） |
 - 旧版 React 主页保留在 `legacy-react-site` 分支。
 
-字体：霞鹜文楷 LXGW WenKai（SIL Open Font License 1.1，见 `fonts/OFL.txt`），按页面用到的字做了子集。
+字体全部自托管、按页面用到的字做了子集，不依赖任何外部字体服务：霞鹜文楷 LXGW WenKai（`fonts/OFL.txt`），Anton、Space Mono、VT323、Noto Serif SC（来自 google/fonts，`fonts/OFL-*.txt`），均为 SIL Open Font License 1.1。
