@@ -1,16 +1,13 @@
-# React + Vite
+# 漂流的舱 · The Drifting Cabin
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Kino Xuan 的个人主页：一艘靠自转产生重力的飞船里的一节舱，漂在黑洞边上。舱里的东西都可以点开：录像机、唱机、书桌上的笔记本、望远镜、攀岩墙、小杏仁、舱门，还有一块地毯。
 
-Currently, two official plugins are available:
+The home page of Kino Xuan: one cabin in a spinning ship drifting by a black hole. Everything in it opens up.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 整个页面是一个 `index.html`：房间在 WebGL2 里实时光线步进绘制，没有框架。中文 / English 可切换。
+- 本地预览：`python3 -m http.server`，打开 http://localhost:8000 。
+- 部署：Vercel 按 `vercel.json` 运行 `node build.mjs`，把静态文件复制到 `dist/`。
+- 小杏仁（Kino 的 AI persona）借用访客自己的 Claude 来思考，只在 Claude 上的那一版里能聊；persona 本身在 [`skills/kino-persona/SKILL.md`](skills/kino-persona/SKILL.md)。
+- 旧版 React 主页保留在 `legacy-react-site` 分支。
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+字体：霞鹜文楷 LXGW WenKai（SIL Open Font License 1.1，见 `fonts/OFL.txt`），按页面用到的字做了子集。
