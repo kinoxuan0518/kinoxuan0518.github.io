@@ -2,7 +2,7 @@
 import { cpSync, rmSync, mkdirSync, existsSync } from 'node:fs';
 rmSync('dist', { recursive: true, force: true });
 mkdirSync('dist');
-for (const p of ['index.html', 'fonts', 'audio', 'skills', 'me.png']) {
+for (const p of ['index.html', 'boot-w.webp', 'boot-t.webp', 'fonts', 'audio', 'skills', 'me.png']) {
   if (existsSync(p)) cpSync(p, `dist/${p}`, { recursive: true });
 }
 console.log('dist ready');
