@@ -15,6 +15,9 @@ export async function GET(req) {
   const h = cors(req.headers.get('origin')), out = { ok: true, configured: !!KEY(), ink: !!process.env.INK_TO };
   if (new URL(req.url).searchParams.has('check') && !limited('check:' + ipOf(req), 6, 10 * 60e3)) {
     out.seen = Object.keys(process.env).filter(k => /DEEPSEEK|LLM_|INK|RESEND/i.test(k));
+    /* a Resend key saved under some other name, or key and name swapped: report the name / a flag, never a value */
+    out.resendLike = Object.keys(process.env).filter(k => /^re_[A-Za-z0-9]/.test(process.env[k] || ''));
+    out.swapped = Object.keys(process.env).some(k => /^re_[A-Za-z0-9]{6,}/.test(k));
     if (KEY()) {
       try {
         const base = (process.env.LLM_BASE_URL || 'https://api.deepseek.com').replace(/\/+$/, '');
