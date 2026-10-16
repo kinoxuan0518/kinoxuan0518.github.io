@@ -6,7 +6,7 @@ The home page of Kino Xuan: one cabin in a spinning ship drifting by a black hol
 
 - 整个页面是一个 `index.html`：房间在 WebGL2 里实时光线步进绘制，没有框架。中文 / English 可切换。
 - 本地预览：`python3 -m http.server`，打开 http://localhost:8000 。
-- 部署：Vercel 按 `vercel.json` 运行 `node build.mjs`，把静态文件复制到 `dist/`。
+- 部署：网页由 GitHub Pages 发布在 https://kinoxuan0518.github.io/ 。Vercel 只负责 `api/` 下的两个小接口（访问 Vercel 域名的首页会跳回 github.io）。
 - 小杏仁（Kino 的 AI persona）：在 Claude 上那一版里借用访客自己的 Claude；在这里走 `api/chat.js`（Vercel 函数），persona 提示词放在服务端 `api/_persona.js`，模型 Key 只在 Vercel 环境变量里。persona 原文在 [`skills/kino-persona/SKILL.md`](skills/kino-persona/SKILL.md)。
 - 笔记本的隐形墨水：写完字消失，内容由 `api/ink.js` 发到 Kino 的邮箱。
 
