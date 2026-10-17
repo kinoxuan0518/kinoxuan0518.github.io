@@ -1915,7 +1915,7 @@ const RESOLVE=`#version 300 es
 precision highp float;
 uniform sampler2D tCur,tHist,tDep;
 uniform vec2 uRes,uSrc,uJit;
-uniform float uK,uWMax,uReset,uClamp,uStep,uFar,uCF,uPF;
+uniform float uK,uWMax,uReset,uClamp,uStep,uFar,uCF,uPF,uDPhi;
 uniform vec3 uCP,uCT,uPP,uPT;
 out vec4 o;
 float LD(ivec2 p){vec4 v=texelFetch(tDep,p,0);
@@ -1943,7 +1943,12 @@ void main(){ivec2 p=ivec2(gl_FragCoord.xy),sz=textureSize(tCur,0)-1;
  for(int j=-1;j<=1;j++)for(int i=-1;i<=1;i++)z=min(z,LD(clamp(ip+ivec2(i,j),ivec2(0),lim)));
  vec2 asp=vec2(uSrc.x/uSrc.y,1.),s=(q-.5)*asp;
  vec3 fw=normalize(uCT-uCP),rt=normalize(cross(vec3(0.,1.,0.),fw)),up=cross(fw,rt);
- vec3 X=uCP+normalize(fw*uCF+rt*s.x+up*s.y)*z;
+ vec3 rd=normalize(fw*uCF+rt*s.x+up*s.y);
+ /* outside the glass is the sky, and the ship turns against it (PHI in the scene, .07 rad/s): follow a star back by
+    that turn, or every star leaves a trail */
+ bool sky=z>uFar*.98;
+ if(sky){float c=cos(uDPhi),sn=sin(uDPhi);rd=vec3(c*rd.x+sn*rd.y,-sn*rd.x+c*rd.y,rd.z);}
+ vec3 X=uCP+rd*z;
  vec3 pf=normalize(uPT-uPP),pr=normalize(cross(vec3(0.,1.,0.),pf)),pu=cross(pf,pr),v=X-uPP;
  float zz=dot(v,pf);
  vec2 hq=zz>.01?vec2(dot(v,pr),dot(v,pu))*uPF/zz/asp+.5:vec2(-1.);
@@ -1954,7 +1959,7 @@ void main(){ivec2 p=ivec2(gl_FragCoord.xy),sz=textureSize(tCur,0)-1;
  /* clamp history to the colours around this pixel now. Held still, the box spans a low-res pixel each way, so the fine
     detail the frames built up survives it. Moving, it tightens to the pixel's own neighbours and their spread: what
     the contour lines and newly uncovered edges left behind in history doesn't fit, and is dropped */
- if(uClamp>.5){bool mov=m2>1.;vec3 mn=c,mx=c,s1=vec3(0.),s2=vec3(0.);int st=mov?1:max(1,int(uStep+.5));
+ if(uClamp>.5){bool mov=m2>1.||sky;vec3 mn=c,mx=c,s1=vec3(0.),s2=vec3(0.);int st=mov?1:max(1,int(uStep+.5));
   for(int j=-1;j<=1;j++)for(int i=-1;i<=1;i++){vec3 k=texelFetch(tCur,clamp(p+ivec2(i,j)*st,ivec2(0),sz),0).rgb;mn=min(mn,k);mx=max(mx,k);s1+=k;s2+=k*k;}
   if(mov){vec3 mu=s1/9.,sd=sqrt(max(s2/9.-mu*mu,0.));h=clamp(h,max(mn,mu-1.25*sd),min(mx,mu+1.25*sd));}
   else h=clamp(h,mn-.02,mx+.02);}
@@ -2144,7 +2149,7 @@ function draw(t){
   const f=pt?.76:sc.cam.f*Math.min(1,Math.max(.55,asp/1.6));
   lastCam={p:cp,t:ct,f};
   /* history is carried across camera moves (the resolve reprojects it); only a jump starts over */
-  const pc=prevCam||{p:cp,t:ct,f};
+  const pc=prevCam||{p:cp,t:ct,f,time:t};
   {const dp=Math.hypot(cp[0]-pc.p[0],cp[1]-pc.p[1],cp[2]-pc.p[2]),a=nrm3(v3(ct,cp)),b=nrm3(v3(pc.t,pc.p));
    if(dp>.4||dot3(a,b)<.985||Math.abs(f-pc.f)>.04)taaN=0}
   const jn=jitN%32+1,jit=SHOT&&!Q.has('aa')?[0,0]:[halton(jn,2)-.5,halton(jn,3)-.5];
@@ -2210,6 +2215,7 @@ function draw(t){
   gl.uniform1f(r.uK,2*up*up);gl.uniform1f(r.uWMax,SHOT?64:histHDR?8:2.5);gl.uniform1f(r.uReset,taaN===0?1:0);
   gl.uniform1f(r.uClamp,SHOT?0:1);gl.uniform1f(r.uStep,up);gl.uniform1f(r.uFar,sc.far);
   gl.uniform3fv(r.uCP,cp);gl.uniform3fv(r.uCT,ct);gl.uniform1f(r.uCF,f);gl.uniform3fv(r.uPP,pc.p);gl.uniform3fv(r.uPT,pc.t);gl.uniform1f(r.uPF,pc.f);
+  gl.uniform1f(r.uDPhi,.07*(t-(pc.time==null?t:pc.time)));
   gl.drawArrays(gl.TRIANGLES,0,3)}
   if(!fin.bad){
   gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,cv.width,cv.height);gl.useProgram(fin.p);const fu=fin.u;
@@ -2219,7 +2225,7 @@ function draw(t){
   gl.drawArrays(gl.TRIANGLES,0,3);
   }else{gl.bindFramebuffer(gl.READ_FRAMEBUFFER,out.f);gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER,null);
     gl.blitFramebuffer(0,0,cv.width,cv.height,0,0,cv.width,cv.height,gl.COLOR_BUFFER_BIT,gl.NEAREST);gl.bindFramebuffer(gl.READ_FRAMEBUFFER,null)}
-  taaFlip=1-taaFlip;taaN++;jitN++;prevCam={p:[...cp],t:[...ct],f};
+  taaFlip=1-taaFlip;taaN++;jitN++;prevCam={p:[...cp],t:[...ct],f,time:t};
   if(inside&&isMouse&&!SHOT&&!moving&&!busy&&!view&&!win)setHover(s,'scene');
   if(!SHOT)adapt(cost,moving);
   return true}
